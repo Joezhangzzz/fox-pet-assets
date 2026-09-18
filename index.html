@@ -1962,6 +1962,26 @@ background-repeat:repeat-y,repeat-y,repeat-y,repeat-y,repeat-y,repeat-y,repeat-y
 </div>
 <div class="scene-page" id="scenePage"><div class="scene-header"><div class="scene-title" id="sceneTitle">场景</div><button class="scene-close" onclick="closeScene()">✕</button></div><div class="scene-body" id="sceneBody"></div></div>
 <script>
+
+// ===== 全局音频函数兜底（确保在任何情况下都能调用） =====
+window.playBGM = window.playBGM || function(id) { 
+  try { if(window.audioManager) window.audioManager.playBGM(id); } catch(e){} 
+};
+window.playSFX = window.playSFX || function(name) { 
+  try { if(window.audioManager) window.audioManager.playSFX(name); } catch(e){} 
+};
+window.stopBGM = window.stopBGM || function() { 
+  try { if(window.audioManager) window.audioManager.stopBGM(); } catch(e){} 
+};
+window.pauseBGM = window.pauseBGM || function() { 
+  try { if(window.audioManager) window.audioManager.pauseBGM(); } catch(e){} 
+};
+window.resumeBGM = window.resumeBGM || function() { 
+  try { if(window.audioManager) window.audioManager.resumeBGM(); } catch(e){} 
+};
+// ================================================
+
+
 // ===== 全局错误处理（调试用）=====
 window.onerror = function(msg, url, line, col, error) {
   const errorDiv = document.createElement('div');
@@ -13343,7 +13363,7 @@ class AudioManager {
 }
 
 // 全局音频管理器实例
-const audioManager = new AudioManager();
+window.audioManager = new AudioManager(); const audioManager = window.audioManager;
 audioManager.loadSettings();
 
 // 便捷播放函数
